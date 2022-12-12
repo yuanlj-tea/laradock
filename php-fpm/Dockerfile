@@ -28,9 +28,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG CHANGE_SOURCE=false
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
     # Change application source from deb.debian.org to aliyun source
-    sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list && \
-    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list && \
-    sed -i 's/security-cdn.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list \
+    sed -i 's/https:\/\/mirrors.aliyun.com/http:\/\/mirrors.cloud.aliyuncs.com/g' /etc/apt/sources.list \
 ;fi
 
 # always run apt update when start and after add new source list, then clean up at end.
@@ -233,6 +231,18 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     fi \
   fi && \
   docker-php-ext-enable xdebug \
+;fi
+
+ARG INSTALL_TIDEWAYS=false
+
+RUN if [ ${INSTALL_TIDEWAYS} = true ]; then \
+  git clone https://github.com/tideways/php-profiler-extension.git && \
+  cd php-profiler-extension && \
+  phpize && \
+  ./configure && \
+  make && \
+  make install && \
+  docker-php-ext-enable tideways_xhprof \
 ;fi
 
 # Copy xdebug configuration for remote debugging
@@ -1193,6 +1203,13 @@ COPY ./laravel.ini /usr/local/etc/php/conf.d
 COPY ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/
 
 USER root
+
+RUN apt-get install wget && \
+    wget https://getcomposer.org/composer.phar && \
+    mv composer.phar composer && \
+    chmod +x composer && \
+    mv composer /usr/local/bin && \
+    composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
 # Clean up
 RUN apt-get clean && \
