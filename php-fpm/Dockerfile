@@ -25,11 +25,13 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
 
+COPY ./sources.list /etc/apt/sources.list 
 ARG CHANGE_SOURCE=false
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
     # Change application source from deb.debian.org to aliyun source
-    sed -i 's/https:\/\/mirrors.aliyun.com/http:\/\/mirrors.cloud.aliyuncs.com/g' /etc/apt/sources.list \
+    cat /etc/apt/sources.list && rm -rf /var/lib/apt/lists/* \
 ;fi
+# RUN sed -i 's/ports.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list; 
 
 # always run apt update when start and after add new source list, then clean up at end.
 RUN set -xe; \
@@ -226,7 +228,11 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; then \
       if [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ]; then \
         pecl install xdebug-2.9.0; \
       else \
-        pecl install xdebug-2.9.8; \
+        if [ $(php -r "echo PHP_MINOR_VERSION;") = "7" ]; then \
+          pecl install xdebug-3.1.6; \
+        else \
+          pecl install xdebug-2.9.8; \
+        fi \
       fi \
     fi \
   fi && \
