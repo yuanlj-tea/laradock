@@ -181,10 +181,10 @@ services:
         - "raw.githubusercontent.com:199.232.28.133"
       ports:
         - "${WORKSPACE_SSH_PORT}:22"
-        - "${WORKSPACE_BROWSERSYNC_HOST_PORT}:3000"
+        - "${WORKSPACE_BROWSERSYNC_HOST_PORT}:3002"
         - "${WORKSPACE_BROWSERSYNC_UI_HOST_PORT}:3001"
-        - "${WORKSPACE_VUE_CLI_SERVE_HOST_PORT}:8080"
-        - "${WORKSPACE_VUE_CLI_UI_HOST_PORT}:8000"
+        # - "${WORKSPACE_VUE_CLI_SERVE_HOST_PORT}:8080"
+        # - "${WORKSPACE_VUE_CLI_UI_HOST_PORT}:8000"
         - "${WORKSPACE_ANGULAR_CLI_SERVE_HOST_PORT}:4200"
       tty: true
       environment:
@@ -1199,6 +1199,38 @@ services:
       networks:
         - backend
 
+### prometheus ################################################
+    prometheus:
+      image: prom/prometheus:latest
+      volumes:
+        - ./prometheus:/etc/prometheus
+      ports:
+        - 9090:9090  
+      networks:
+        - backend
+      command:
+        - '--config.file=/etc/prometheus/prometheus.yaml'
+        # 支持热更新
+        - '--web.enable-lifecycle'
+        # 保留90天的数据（默认保留15天的数据）
+        - '--storage.tsdb.retention.time=30d'
+      depends_on:
+        - alertmanager  
+### alertmanager ################################################
+    alertmanager:
+      image: quay.io/prometheus/alertmanager:latest
+      container_name: alertmanager
+      hostname: alertmanager
+      restart: always
+      ports:
+        - '9093:9093'
+      volumes:
+        - './prometheus:/etc/alertmanager'
+      command:
+        - '--config.file=/etc/alertmanager/alertmanager.yaml'
+      networks:
+        - backend
+    
 ### Graylog #######################################
     graylog:
       build: ./graylog

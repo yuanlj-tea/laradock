@@ -1,0 +1,35 @@
+groups:
+- name: alert-rules                               #告警的分组，后续告警优化时，可通过分组做优化配置
+  rules:
+  - alert: 7000-流量API接口预警:prometheus告警|rabbitmq队列消息堆积
+    expr: xyf_api_gateway_rabbitmq_lag{instance="api.xinfei.cn:80"} > 1000
+    for: 60s
+    labels:
+      severity: 'critical'   
+    annotations:
+      description: rabbitmq队列消息堆积
+      summary: 消息堆积
+  # - alert: 7000-流量API接口预警:prometheus告警|被调接口,P90>4s
+  #   expr: histogram_quantile(0.90, sum(rate(xyf_api_gateway_http_requests_bucket{instance="api.xinfei.cn:80"}[10m])) by (le, request_path)) > 4
+  #   for: 10s
+  #   labels:
+  #     severity: 'critical'
+  #   annotations:                                     
+  #     description: 被调接口，P90>4s
+  #     summary: 被调接口，P90>4s
+  # - alert: 7000-流量API接口预警:号外|请求三方接口,P90>4s
+  #   expr: histogram_quantile(0.90, sum(rate(xyf_api_gateway_http_client_bucket{instance="api.xinfei.cn:80"}[10m])) by (le, request_path)) > 4
+  #   for: 10s
+  #   labels:
+  #     severity: 'critical'
+  #   annotations:                                     
+  #     description: 请求三方接口,P90>4s
+  #     summary: 请求三方接口,P90>4s
+  - alert: 7000-流量API接口预警:号外|三方接口调用成功率低于80%
+    expr: sum(rate(xyf_api_gateway_http_client_count{request_status=~"[1-3]\\d{2}"}[5m])) by (request_path) / sum(rate(xyf_api_gateway_http_client_count{}[5m])) by (request_path) *100 < 80
+    for: 10s
+    labels:
+      severity: 'critical'
+    annotations:                                     
+      description: 三方接口调用成功率低于80%
+      summary: 三方接口调用成功率低于80% 

@@ -22,8 +22,8 @@ ARG LARADOCK_PHP_VERSION
 
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
-ENV http_proxy="http://192.168.8.35:1087"
-ENV https_proxy="http://192.168.8.35:1087"
+# ENV http_proxy="http://192.168.8.35:1087"
+# ENV https_proxy="http://192.168.8.35:1087"
 
 # Start as root
 USER root
