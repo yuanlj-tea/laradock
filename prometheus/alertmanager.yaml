@@ -7,7 +7,7 @@ route:
 receivers:
 - name: 'web.hook'
   webhook_configs:
-  - url: 'http://192.168.31.179:8080/webhook'
+  - url: 'http://192.168.8.35:8080/webhook'
 inhibit_rules:
   - source_match:
       severity: 'critical'

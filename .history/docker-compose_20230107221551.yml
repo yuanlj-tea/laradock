@@ -1238,11 +1238,12 @@ services:
       ports:
         - '8080:8080'
       environment:
-        PARAMS: '--spring.datasource.url=jdbc:mysql://mysql:3306/xxl_job?Unicode=true&characterEncoding=UTF-8 --spring.datasource.username=root --spring.datasource.password=123456 --xxl.job.accessToken=123456'
-      depends_on:
-        - mysql
+        - '--spring.datasource.url=jdbc:mysql://mysql:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai'
+        - '--spring.datasource.username=root'
+        - '--spring.datasource.password=123456'
+        - '--xxl.job.accessToken=123456'
       networks:
-        - backend 
+        - backend  
 
     
 ### Graylog #######################################
