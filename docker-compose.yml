@@ -1242,8 +1242,18 @@ services:
       depends_on:
         - mysql
       networks:
-        - backend 
+        - backend
 
+    nacos:
+      image: paderlol/nacos:latest
+      container_name: nacos-standalone
+      environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      volumes:
+      - ./logs:/home/nacos/logs
+      ports:
+      - "8848:8848"
     
 ### Graylog #######################################
     graylog:
