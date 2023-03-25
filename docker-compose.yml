@@ -177,6 +177,7 @@ services:
         - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d:/etc/supervisord.d
         - /opt/logs:/data/logs
+        - /Users/yuanlj/.ssh:/root/.ssh
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
         - "raw.githubusercontent.com:199.232.28.133"
@@ -1223,7 +1224,7 @@ services:
       image: quay.io/prometheus/alertmanager:latest
       container_name: alertmanager
       hostname: alertmanager
-      restart: always
+      # restart: always
       ports:
         - '9093:9093'
       volumes:
@@ -1236,7 +1237,7 @@ services:
       image: xuxueli/xxl-job-admin:2.3.1
       container_name: xxl-job    
       hostname: xxl-job
-      restart: always
+      # restart: always
       ports:
         - '8081:8081'
       environment:
