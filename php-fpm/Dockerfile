@@ -144,6 +144,7 @@ RUN if [ ${INSTALL_SSH2} = true ]; then \
 ;fi
 
 ARG INSTALL_YAC=false
+COPY ./yac.ini /usr/local/etc/php/conf.d/yac.ini
 RUN if [ ${INSTALL_YAC} = true ]; then \
   # Install the yac extension
   pecl install yac; \
