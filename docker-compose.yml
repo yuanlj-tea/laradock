@@ -75,6 +75,7 @@ services:
           - INSTALL_GNUPG=${WORKSPACE_INSTALL_GNUPG}
           - INSTALL_XDEBUG=${WORKSPACE_INSTALL_XDEBUG}
           - INSTALL_PCOV=${WORKSPACE_INSTALL_PCOV}
+          - INSTALL_YAC=${WORKSPACE_INSTALL_YAC}
           - INSTALL_PHPDBG=${WORKSPACE_INSTALL_PHPDBG}
           - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
           - INSTALL_SSH2=${WORKSPACE_INSTALL_SSH2}
@@ -195,6 +196,7 @@ services:
         - DOCKER_TLS_VERIFY=1
         - DOCKER_TLS_CERTDIR=/certs
         - DOCKER_CERT_PATH=/certs/client
+        - WEB_ENV=local
       networks:
         - frontend
         - backend
@@ -220,6 +222,7 @@ services:
           - INSTALL_PHPDBG=${PHP_FPM_INSTALL_PHPDBG}
           - INSTALL_BLACKFIRE=${INSTALL_BLACKFIRE}
           - INSTALL_SSH2=${PHP_FPM_INSTALL_SSH2}
+          - INSTALL_YAC=${PHP_FPM_INSTALL_YAC}
           - INSTALL_SOAP=${PHP_FPM_INSTALL_SOAP}
           - INSTALL_XSL=${PHP_FPM_INSTALL_XSL}
           - INSTALL_SMB=${PHP_FPM_INSTALL_SMB}

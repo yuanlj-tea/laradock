@@ -32,11 +32,13 @@ USER root
 # If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
 ###########################################################################
 
+# COPY ./sources1.list /etc/apt/sources.list 
 ARG CHANGE_SOURCE=false
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
     # Change application source from deb.debian.org to aliyun source
-    sed -i 's/ports.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list; \
-  fi;
+    sed -i 's/ports.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
+    # cat /etc/apt/sources.list && rm -rf /var/lib/apt/lists/* \
+;fi
 
 ###########################################################################
 # Laradock non-root user:
@@ -393,6 +395,16 @@ RUN if [ ${INSTALL_PCOV} = true ]; then \
   ;fi \
 ;fi
 
+ARG INSTALL_YAC=false
+RUN if [ ${INSTALL_YAC} = true ]; then \
+  if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
+    if [ $(php -r "echo PHP_MINOR_VERSION;") != "0" ]; then \
+      pecl install yac && \
+      echo "extension=yac.so" >> /etc/php/${LARADOCK_PHP_VERSION}/cli/php.ini && \
+      echo "yac.enabled" >> /etc/php/${LARADOCK_PHP_VERSION}/cli/php.ini \
+    ;fi \
+  ;fi \
+;fi
 
 ###########################################################################
 # Phpdbg:

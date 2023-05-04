@@ -25,7 +25,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # If you're in China, or you need to change sources, will be set CHANGE_SOURCE to true in .env.
 
-COPY ./sources.list /etc/apt/sources.list 
+COPY ./sources1.list /etc/apt/sources.list 
 ARG CHANGE_SOURCE=false
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
     # Change application source from deb.debian.org to aliyun source
@@ -141,6 +141,13 @@ RUN if [ ${INSTALL_SSH2} = true ]; then \
         pecl install -a ssh2-1.3.1; \
     fi && \
     docker-php-ext-enable ssh2 \
+;fi
+
+ARG INSTALL_YAC=false
+RUN if [ ${INSTALL_YAC} = true ]; then \
+  # Install the yac extension
+  pecl install yac; \
+  docker-php-ext-enable yac \
 ;fi
 
 ###########################################################################
