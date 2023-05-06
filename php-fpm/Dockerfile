@@ -151,6 +151,9 @@ RUN if [ ${INSTALL_YAC} = true ]; then \
   docker-php-ext-enable yac \
 ;fi
 
+COPY ./apcu.ini /usr/local/etc/php/conf.d/apcu.ini
+
+
 ###########################################################################
 # libfaketime:
 ###########################################################################
