@@ -1220,6 +1220,7 @@ services:
         - '--web.enable-lifecycle'
         # 保留90天的数据（默认保留15天的数据）
         - '--storage.tsdb.retention.time=30d'
+        - '--web.external-url=http://192.168.8.35:9090/'
       depends_on:
         - alertmanager  
 ### alertmanager ################################################
@@ -1236,6 +1237,27 @@ services:
         - '--config.file=/etc/alertmanager/alertmanager.yaml'
       networks:
         - backend
+
+### prometheus-webhook-dingtalk ################################################
+    prometheus-webhook-dingtalk:
+      image: timonwong/prometheus-webhook-dingtalk
+      container_name: prometheus-webhook-dingtalk
+      hostname: prometheus-webhook-dingtalk
+      ports:
+        - '8060:8060'
+      volumes:
+        - './prometheus:/etc/prometheus-webhook-dingtalk'
+      command:
+        # 指定配置文件
+        - '--config.file=/etc/prometheus-webhook-dingtalk/prometheus-webhook-dingtalk.yml'
+        # 指定启动端口
+        - '--web.listen-address=:8060'
+        # Enable Web UI mounted on /ui path
+        - '--web.enable-ui'
+        - '--web.enable-lifecycle'
+      networks:
+        - backend
+
     xxl-job:
       image: xuxueli/xxl-job-admin:2.3.1
       container_name: xxl-job    

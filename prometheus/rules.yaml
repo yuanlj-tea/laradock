@@ -8,7 +8,7 @@ groups:
       severity: 'critical'   
     annotations:
       description: rabbitmq队列消息堆积
-      summary: 消息堆积
+      summary: 消息堆积，当前值：{{ $value }}
   # - alert: 7000-流量API接口预警:prometheus告警|被调接口,P90>4s
   #   expr: histogram_quantile(0.90, sum(rate(xyf_api_gateway_http_requests_bucket{instance="api.xinfei.cn:80"}[10m])) by (le, request_path)) > 4
   #   for: 10s
@@ -32,4 +32,4 @@ groups:
       severity: 'critical'
     annotations:                                     
       description: 三方接口调用成功率低于80%
-      summary: 三方接口调用成功率低于80% 
+      summary: 三方接口调用成功率低于80%，当前值：{{ $value }}
