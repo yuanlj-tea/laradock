@@ -9,14 +9,14 @@ groups:
     annotations:
       description: rabbitmq队列消息堆积
       summary: 消息堆积，当前值：{{ $value }}
-  - alert: 7000-流量API接口预警:prometheus告警|被调接口,P90>4s
-    expr: histogram_quantile(0.90, sum(rate(xyf_api_gateway_http_requests_bucket{instance="api.xinfei.cn:80"}[10m])) by (le, request_path)) > 4
-    for: 10s
-    labels:
-      severity: 'critical'
-    annotations:                                     
-      description: 被调接口，P90>4s
-      summary: 被调接口，P90>4s
+  # - alert: 7000-流量API接口预警:prometheus告警|被调接口,P90>4s
+  #   expr: histogram_quantile(0.90, sum(rate(xyf_api_gateway_http_requests_bucket{instance="api.xinfei.cn:80"}[10m])) by (le, request_path)) > 4
+  #   for: 10s
+  #   labels:
+  #     severity: 'critical'
+  #   annotations:                                     
+  #     description: 被调接口，P90>4s
+  #     summary: 被调接口，P90>4s
   # - alert: 7000-流量API接口预警:号外|请求三方接口,P90>4s
   #   expr: histogram_quantile(0.90, sum(rate(xyf_api_gateway_http_client_bucket{instance="api.xinfei.cn:80"}[10m])) by (le, request_path)) > 4
   #   for: 10s
