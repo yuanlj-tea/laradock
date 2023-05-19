@@ -151,8 +151,6 @@ RUN if [ ${INSTALL_YAC} = true ]; then \
   docker-php-ext-enable yac \
 ;fi
 
-COPY ./apcu.ini /usr/local/etc/php/conf.d/apcu.ini
-
 
 ###########################################################################
 # libfaketime:
@@ -877,7 +875,7 @@ RUN if [ $INSTALL_PHALCON = true ]; then \
 ###########################################################################
 
 ARG INSTALL_APCU=false
-
+COPY ./apcu.ini /usr/local/etc/php/conf.d/apcu.ini
 RUN if [ ${INSTALL_APCU} = true ]; then \
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
         pecl install -a apcu-4.0.11; \

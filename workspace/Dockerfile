@@ -407,6 +407,21 @@ RUN if [ ${INSTALL_YAC} = true ]; then \
 ;fi
 
 ###########################################################################
+# APCU:
+###########################################################################
+
+ARG INSTALL_APCU=false
+COPY ./apcu.ini /usr/local/etc/php/conf.d/apcu.ini
+RUN if [ ${INSTALL_APCU} = true ]; then \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+        pecl install -a apcu-4.0.11; \
+    else \
+        pecl install apcu; \
+    fi && \
+    docker-php-ext-enable apcu \
+;fi
+
+###########################################################################
 # Phpdbg:
 ###########################################################################
 

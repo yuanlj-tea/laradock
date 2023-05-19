@@ -25,8 +25,8 @@ groups:
   #   annotations:                                     
   #     description: 请求三方接口,P90>4s
   #     summary: 请求三方接口,P90>4s
-  - alert: 7000-流量API接口预警:号外|三方接口调用成功率低于80%
-    expr: sum(rate(xyf_api_gateway_http_client_count{request_status=~"[1-3]\\d{2}"}[5m])) by (request_path) / sum(rate(xyf_api_gateway_http_client_count{}[5m])) by (request_path) *100 < 80
+  - alert: 7000-流量API接口预警:号外|三方接口调用成功率低于90%
+    expr: sum(rate(xyf_api_gateway_http_client_count{request_status=~"[1-3]\\d{2}"}[5m])) by (request_path) / sum(rate(xyf_api_gateway_http_client_count{}[5m])) by (request_path) *100 < 90
     for: 10s
     labels:
       severity: 'critical'
