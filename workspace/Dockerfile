@@ -418,7 +418,8 @@ RUN if [ ${INSTALL_APCU} = true ]; then \
     else \
         pecl install apcu; \
     fi && \
-    docker-php-ext-enable apcu \
+    echo "extension=yac.so" >> /etc/php/${LARADOCK_PHP_VERSION}/cli/php.ini && \
+    echo "yac.enabled" >> /etc/php/${LARADOCK_PHP_VERSION}/cli/php.ini \
 ;fi
 
 ###########################################################################

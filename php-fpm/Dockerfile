@@ -151,6 +151,59 @@ RUN if [ ${INSTALL_YAC} = true ]; then \
   docker-php-ext-enable yac \
 ;fi
 
+ARG INSTALL_GRPC=false
+RUN if [ ${INSTALL_GRPC} = true ]; then \
+  # Install the yac extension
+  pecl install grpc; \
+  docker-php-ext-enable grpc \
+;fi
+
+ARG INSTALL_PROTOBUF=false
+RUN if [ ${INSTALL_PROTOBUF} = true ]; then \
+  # Install the yac extension
+  pecl install protobuf; \
+  docker-php-ext-enable protobuf \
+;fi
+
+# ENV GRPC_RELEASE_TAG v1.31.x
+# ENV PROTOBUF_RELEASE_TAG 3.13.x
+# RUN mkdir -p /usr/local/lib && mkdir -p /usr/local/lib64
+# ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
+# ENV LD_RUN_PATH=$LD_RUN_PATH:/usr/local/lib:/usr/local/lib64
+
+# RUN set -ex \
+#     && echo "--- prepare depends ---" \
+#     && apt-get update && apt install -y build-essential libssl-dev build-essential autoconf libtool pkg-config cmake autoconf automake libtool curl make g++ unzip git \
+#     && echo "--- clone grpc ---" \
+#     && git clone --depth 1 -b ${GRPC_RELEASE_TAG} https://github.com/grpc/grpc ./grpc \
+#     && cd ./grpc \
+#     && git submodule update --init --recursive
+
+COPY ./grpc.tgz /tmp/grpc.tgz
+
+RUN echo "--- start unzip grpc.tgz ---" \
+    && chmod -R 777 /tmp/grpc.tgz \
+    && cd /tmp && mkdir grpc && chmod -R 777 ./grpc \
+    && tar -zxf ./grpc.tgz \
+    && ls -alh /tmp/grpc/ \
+    && echo "--- installing protobuf ---" \
+    && cd /tmp/grpc/third_party/protobuf \
+    && ./autogen.sh && ./configure && make -j$(nproc) && make install && make clean
+
+RUN echo "--- installing grpc ---" \
+    && cd /tmp/grpc \
+    && mkdir -p cmake/build && cd cmake/build && cmake ../.. -DBUILD_SHARED_LIBS=ON -DgRPC_INSTALL=ON \
+    && make -j$(nproc) && make install && make clean
+RUN rm -rf /tmp/grpc
+
+ARG INSTALL_SKYWALKING=false
+COPY ./skywalking.ini /usr/local/etc/php/conf.d/skywalking.ini
+RUN if [ ${INSTALL_SKYWALKING} = true ]; then \
+  # Install the yac extension
+  pecl install skywalking-4.2.0; \
+  docker-php-ext-enable skywalking \
+;fi
+
 
 ###########################################################################
 # libfaketime:
@@ -514,6 +567,12 @@ ARG INSTALL_PCNTL=false
 RUN if [ ${INSTALL_PCNTL} = true ]; then \
     # Installs pcntl, helpful for running Horizon
     docker-php-ext-install pcntl \
+;fi
+
+ARG INSTALL_SOCKETS=false
+RUN if [ ${INSTALL_SOCKETS} = true ]; then \
+    # Installs pcntl, helpful for running Horizon
+    docker-php-ext-install sockets \
 ;fi
 
 ###########################################################################
