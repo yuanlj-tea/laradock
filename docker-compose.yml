@@ -2155,7 +2155,7 @@ services:
       environment:
         - discovery.type=single-node #单例模式
         - bootstrap.memory_lock=true #锁定物理内存地址，防止es内存被交换出去，也就是避免es使用swap交换分区，频繁的交换，会导致IOPS变高
-        - "ES_JAVA_OPTS=-Xms1048m -Xmx1048m" #堆内存大小
+        - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m" #堆内存大小
         - TZ=Asia/Shanghai
       ulimits:
         memlock:
