@@ -1300,6 +1300,17 @@ services:
       #   - mysql
       networks:
         - backend
+
+    ncaos-m1:
+      image: zill057/nacos-server-apple-silicon:2.0.3
+      container_name: nacos-m1
+      ports:
+        - 8848:8848
+      environment:
+        TZ: Asia/Shanghai
+        MODE: standalone
+      networks:
+        - backend
     
 ### Graylog #######################################
     graylog:
