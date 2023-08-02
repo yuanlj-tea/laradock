@@ -422,6 +422,7 @@ services:
         - "${NGINX_HOST_HTTP_PORT}:80"
         - "${NGINX_HOST_HTTPS_PORT}:443"
         - "${VARNISH_BACKEND_PORT}:81"
+        - 82:82
       depends_on:
         - php-fpm
       networks:
@@ -729,7 +730,13 @@ services:
 
 ### Redis Cluster ##########################################
     redis-cluster:
-      build: ./redis-cluster
+      build: 
+        context: ./redis-cluster
+        # args:
+        #   - IP=0.0.0.0
+      platform: linux/x86_64
+      environment:
+        - IP=0.0.0.0
       ports:
         - "${REDIS_CLUSTER_PORT_RANGE}:7000-7005"
       networks:
