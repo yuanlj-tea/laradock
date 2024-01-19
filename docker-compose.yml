@@ -736,9 +736,7 @@ services:
         #   - IP=0.0.0.0
       platform: linux/x86_64
       environment:
-        - IP=0.0.0.0
-      volumes:
-        - ${DATA_PATH_HOST}/redis-cluster:/data  
+        - IP=0.0.0.0  
       ports:
         - "${REDIS_CLUSTER_PORT_RANGE}:7000-7005"
       networks:
@@ -746,12 +744,14 @@ services:
 ### Redis Cluster 可以设置密码##########################################     
     redis-cluster1:
       image: 'phuongdm1987/docker-redis-cluster:1.0.0'
-      volumes:
-        - ${DATA_PATH_HOST}/redis-cluster1:/data 
+      platform: linux/x86_64
       ports:
         - '7000-7005:7000-7005'
       environment:
-        DEFAULT_PASSWORD: '8NXrzAMf'
+        - IP= 0.0.0.0
+        - DEFAULT_PASSWORD= '8NXrzAMf'
+      networks:
+        - backend
 ### SSDB ################################################
     ssdb:
       build: ./ssdb
